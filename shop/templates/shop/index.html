@@ -2,11 +2,11 @@
 <html>
 <head>
     <meta name="viewport" content="width=device-width" />
-    <title>Товары</title>
+    <title>Товары (главная страница)</title>
 </head>
 <body>
     <div>
-        <h3>Список</h3>
+        <h3>Список доступных товаров</h3>
         <table>
             <tr>
                 <td><p>Наименование</p></td>
@@ -17,10 +17,40 @@
                 <tr>
                     <td><p>{{ p.name }}</p></td>
                     <td><p>{{ p.price }}</p></td>
-                    <td><p><a href="/buy/{{ p.id }}">Купить</a></p></td>
+                    <td><p onclick="add_to_backet({{ p.id }}, {{p.price}}, '{{p.name}}')">Добавить в корзину</p></td>
                 </tr>
             {% endfor %}
         </table>
     </div>
+    <div id="basket">
+        <h3>Корзина</h3>
+        <table>
+            <tr>
+                <td><p>Наименование</p></td>
+                <td><p>Цена</p></td>
+                <td></td>
+            </tr>
+
+        </table>
+        <p><a href="/buy/{{ p.id }}">Купить</a></p>
+    </div>
+
+
 </body>
+<script>
+    var buyed = []
+    function add_to_backet(p1, p2, p3){
+
+        buyed.push({id: p1, price: p2, name: p3});
+        console.log(buyed);
+        var table = document.getElementById("basket")
+        var tr = document.createElement("tr");
+        var a = 4
+        for(let i = 0; i<buyed.length; i++){
+            tr.innerHTML = '<td>'+ buyed[i].name + '</td>';
+            table.appendChild(tr);
+        }
+    }
+
+</script>
 </html>
