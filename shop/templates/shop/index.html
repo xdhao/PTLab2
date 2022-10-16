@@ -3,6 +3,11 @@
 <head>
     <meta name="viewport" content="width=device-width" />
     <title>Товары (главная страница)</title>
+    <style>
+        table, th, td {
+          border: 1px solid black;
+        }
+    </style>
 </head>
 <body>
     <div>
@@ -11,46 +16,96 @@
             <tr>
                 <td><p>Наименование</p></td>
                 <td><p>Цена</p></td>
-                <td></td>
             </tr>
             {% for p in products %}
                 <tr>
                     <td><p>{{ p.name }}</p></td>
                     <td><p>{{ p.price }}</p></td>
-                    <td><p onclick="add_to_backet({{ p.id }}, {{p.price}}, '{{p.name}}')">Добавить в корзину</p></td>
+                    <td><button onclick="add_to_backet({{ p.id }}, {{p.price}}, '{{p.name}}')">+</button></td>
                 </tr>
             {% endfor %}
         </table>
     </div>
-    <div id="basket">
+    <div id="buyblock">
         <h3>Корзина</h3>
-        <table>
+        <table id="basket">
             <tr>
                 <td><p>Наименование</p></td>
                 <td><p>Цена</p></td>
-                <td></td>
             </tr>
-
         </table>
-        <p><a href="/buy/{{ p.id }}">Купить</a></p>
+        <p><a id="buysource" href="/buy/">Купить</a></p>
     </div>
 
 
 </body>
 <script>
     var buyed = []
-    function add_to_backet(p1, p2, p3){
 
-        buyed.push({id: p1, price: p2, name: p3});
-        console.log(buyed);
-        var table = document.getElementById("basket")
-        var tr = document.createElement("tr");
-        var a = 4
-        for(let i = 0; i<buyed.length; i++){
-            tr.innerHTML = '<td>'+ buyed[i].name + '</td>';
-            table.appendChild(tr);
-        }
+    function makeid(length) {
+        var result           = '';
+        var characters       = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz';
+        var charactersLength = characters.length;
+        for ( var i = 0; i < length; i++ ) {
+          result += characters.charAt(Math.floor(Math.random() *
+     charactersLength));
+       }
+       return result;
     }
+
+    function deleteRow(row, id, name, price) {
+        del_id = row.getAttribute("id");
+
+        item = {id: id, price: price, name: name};
+        index = -1
+        for (var i=0; i < buyed.length; i++){
+            if(buyed[i].id==item.id && buyed[i].name==item.name && buyed[i].price==item.price){
+                index =  i;
+            }
+        }
+        if (index !== -1){
+            buyed.splice(index, 1);
+        }
+
+        document.getElementById(del_id).remove();
+
+        var ids = ''
+        for (var i=0; i < buyed.length; i++){
+            if (i == buyed.length-1){
+                ids = ids + "product_id="+buyed[i].id;
+            }
+            else{ids = ids + "product_id="+buyed[i].id+"&";}
+        }
+        var url = document.getElementById("buysource");
+        url.setAttribute("href", "/buy/?"+ids);
+
+    }
+
+    function add_to_backet(p1, p2, p3) {
+        buyed.push({id: p1, price: p2, name: p3});
+
+        var table = document.getElementById("basket");
+        var tr = document.createElement("tr");
+        unindex = makeid(12);
+
+        pname ="'" + buyed[buyed.length-1].name + "'";
+        tr.setAttribute("id", unindex);
+        tr.innerHTML = '<td>'+ buyed[buyed.length-1].name + '</td>' + '<td>'+ buyed[buyed.length-1].price +
+        '</td>' +'<td><button onclick="deleteRow('+unindex+','+buyed[buyed.length-1].id+','+pname+','+buyed[buyed.length-1].price+')">-</button></td>';
+        table.appendChild(tr);
+
+
+        var ids = ''
+        for (var i=0; i < buyed.length; i++){
+            if (i == buyed.length-1){
+                ids = ids + "product_id="+buyed[i].id;
+            }
+            else{ids = ids + "product_id="+buyed[i].id+"&";}
+        }
+        var url = document.getElementById("buysource");
+        url.setAttribute("href", "/buy/?"+ids);
+    }
+
 
 </script>
 </html>

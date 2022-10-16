@@ -8,7 +8,11 @@
     <div>
         <h3>Покупка</h3>
         <form method="post">{% csrf_token %}
-            <input type="hidden" value="{{ view.kwargs.product_id }}" name="product" />
+            {%for list_of_elements in request.GET.lists %}
+                {%if list_of_elements.0 == "product_id"%}
+                    <input type="hidden" value="{{ list_of_elements.1|join:',' }}" name="product" />
+                {%endif%}
+            {%endfor%}
             <table>
                 <tr>
                     <td><p>Введите свое имя </p></td>
