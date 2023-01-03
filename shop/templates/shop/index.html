@@ -28,6 +28,7 @@
     </div>
     <div id="buyblock">
         <h3>Корзина</h3>
+        <h4 id="count">Количество покупок: 0<h4>
         <table id="basket">
             <tr>
                 <td><p>Наименование</p></td>
@@ -79,6 +80,8 @@
         var url = document.getElementById("buysource");
         url.setAttribute("href", "/buy/?"+ids);
 
+        document.getElementById("count").innerHTML = "Количество покупок: " + buyed.length;
+
     }
 
     function add_to_backet(p1, p2, p3) {
@@ -104,6 +107,9 @@
         }
         var url = document.getElementById("buysource");
         url.setAttribute("href", "/buy/?"+ids);
+
+        document.getElementById("count").innerHTML = "Количество покупок: " + buyed.length;
+
     }
 
 

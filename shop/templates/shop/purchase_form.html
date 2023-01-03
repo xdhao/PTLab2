@@ -10,7 +10,7 @@
         <form method="post">{% csrf_token %}
             {%for list_of_elements in request.GET.lists %}
                 {%if list_of_elements.0 == "product_id"%}
-                    <input type="hidden" value="{{ list_of_elements.1|join:',' }}" name="product" />
+                    <input type="hidden" value="{{ list_of_elements.1|join:',' }}" name="products" />
                 {%endif%}
             {%endfor%}
             <table>
